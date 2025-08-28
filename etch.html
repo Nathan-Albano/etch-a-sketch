@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang = "en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Etch-a-Sketch</title>
+    </head>
+    <style>
+        h1, div{
+            text-align: center;
+            margin: auto;
+            padding: 10px;
+        }
+
+        div{
+            font-size: 24px;
+        }
+
+        input[type="number"]{
+            width: 100px;
+            height: 20px;
+        }
+        .container {
+            
+            display: flex;
+            flex-wrap: wrap;
+            border: 2px solid black;
+            gap: 0;
+            padding: 0;
+            margin: auto;
+            aspect-ratio: 1/1;
+
+        }
+        .container div {
+            background-color: lightgray;
+            aspect-ratio: 1 / 1;
+            box-sizing: border-box;
+        }
+    </style>
+    <body>
+        <h1>Etch-a-Sketch</h1>
+        <div>
+            <label for="item">Provide Length:</label>
+            <input type="number" name="numBoxes" id="numBoxes" min="4" max="100">
+            <button id="createBtn">Create Etch</button>
+        </div>
+        <div class="container">
+        </div>
+    </body>
+    <script>
+        const numBoxes = document.querySelector("#numBoxes");
+        const createBtn = document.querySelector("#createBtn");
+        const container = document.querySelector(".container");
+
+        function generateRandomColor() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+        
+        createBtn.addEventListener('click', function(){
+            const minVal = parseInt(numBoxes.min);
+            const maxVal = parseInt(numBoxes.max);
+            const inputVal = parseInt(numBoxes.value);
+
+            if(inputVal > maxVal || inputVal < minVal){
+                alert("Error: Input Value between 4-100");
+                return;
+            }
+
+            container.innerHTML = "";
+            for(let i = 0; i < inputVal * inputVal; i++){
+                const cell = document.createElement("div");
+                cell.style.flexBasis = `calc(${Math.floor(10000 / inputVal) / 100}%)`;
+                
+                cell.addEventListener('mouseenter', function(){
+                    cell.style.backgroundColor = generateRandomColor();
+                });
+                    
+                
+                container.appendChild(cell);
+            }
+
+        });
+
+
+
+          function resizeContainer() {
+            const container = document.querySelector('.container');
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const size = 0.75 * Math.min(vw, vh);
+            container.style.width = `${size}px`;
+            container.style.height = `${size}px`;
+        }
+
+        window.addEventListener('load', resizeContainer);
+        window.addEventListener('resize', resizeContainer);
+    </script>
+</html>
